@@ -1,0 +1,24 @@
+.vote-phase {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.timer {
+    display: flex;
+    flex-direction: column;
+}
+
+.digits {
+    font-size: 4rem;
+    text-align: center;
+}
+
+.player-inputs-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

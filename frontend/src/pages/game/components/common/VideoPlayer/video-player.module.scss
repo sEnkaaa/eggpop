@@ -1,0 +1,92 @@
+.container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  pointer-events: none;
+}
+
+.screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.fade-in {
+  animation: fade-to-black 1s ease-in-out forwards;
+}
+
+@keyframes fade-to-black {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.overlay-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.tour {
+  margin-bottom: 1rem;
+}
+
+.countdown {
+  font-size: 4rem;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+}
+
+.play-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  font-size: 1.5rem;
+  border: none;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.subtitle {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5rem;
+  color: white;
+  background: rgba(0, 0, 0, 0.6); /* Fond semi-transparent pour améliorer la lisibilité */
+  padding: 10px;
+  z-index: 100;
+}
+
+.subtitle-editable {
+  color: yellow
+}
+
+.skipButton {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  pointer-events: auto;
+}

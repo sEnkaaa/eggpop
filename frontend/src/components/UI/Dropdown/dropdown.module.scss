@@ -1,0 +1,43 @@
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.trigger {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #9f3319; // violet
+  border: 3px solid #FF8400;
+  min-width: 200px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border-radius: 6px;
+  margin-top: 6px;
+  z-index: 1000;
+}
+
+.item {
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+
+  &:hover {
+    background: #b95036; // violet plus clair au survol
+  }
+}
+
+.icon {
+  width: 12px;
+  height: 12px;
+  font-size: 12px;
+}

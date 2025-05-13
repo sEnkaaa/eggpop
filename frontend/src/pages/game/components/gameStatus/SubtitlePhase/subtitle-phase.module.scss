@@ -1,0 +1,27 @@
+.subtitle-phase {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.timer {
+    display: flex;
+    flex-direction: column;
+}
+
+.digits {
+    font-size: 4rem;
+    text-align: center;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    width: 100%
+}

@@ -1,0 +1,30 @@
+.room-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.code-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.code {
+    flex: 1;
+    background: white;
+    color: $secondary-color;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    font-weight: 800;
+    border-radius: 50px;
+}
+
+.link-container {
+    color: $text-color;
+    text-decoration: underline;
+    cursor: pointer;
+}

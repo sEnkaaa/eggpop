@@ -1,0 +1,58 @@
+.notification-container {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  pointer-events: none;
+}
+
+.notification {
+  position: relative;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.3s ease;
+  pointer-events: auto;
+  max-width: 320px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  
+  /* Close Button */
+  .closeButton {
+    cursor: pointer;
+  }
+
+  &.error {
+    background-color: #e74c3c;
+  }
+
+  &.info {
+    background-color: #3498db;
+  }
+
+  &.success {
+    background-color: #2ecc71;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

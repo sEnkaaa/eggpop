@@ -1,0 +1,41 @@
+.vote-results {
+    text-align: center;
+    padding: 2rem;
+}
+
+.results-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.result-content {
+    margin-top: 2rem;
+}
+
+.subtitle-block {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+}
+
+.nickname {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.vote-count {
+    font-size: 1.4rem;
+    color: green;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,63 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.input-wrapper {
+  padding: 4px; // espace intérieur au lieu d'un margin sur l'input
+  border: 4px solid $input-background-color;
+  border-radius: $border-radius;
+  box-sizing: border-box;
+
+  &.focused {
+    border-color: white;
+  }
+
+  &.error {
+    border-color: #ff7d31;
+  }
+
+  &.block {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.input {
+  padding: 0.5rem;
+  border-radius: 12px;
+  color: $text-color;
+  background-color: $input-background-color;
+  border: none;
+  text-align: center;
+  font-size: 1.6rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box; // important pour respecter le conteneur
+
+  &::placeholder {
+    color: $input-placeholder-color;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (max-width: 1024px) {
+    font-size: 1rem;
+  }
+
+  &.block {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.error-message {
+  color: $error-color;
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+}

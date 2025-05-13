@@ -1,0 +1,66 @@
+.player-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.player {
+    display: flex;
+    align-items: center;
+}
+
+.image-wrapper {
+    position: relative;
+    display: inline-block;
+
+    .avatar {
+        position: relative;
+        width: 8vh;
+        z-index: 2;
+        display: block;
+    }
+
+    .frame {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1;
+        pointer-events: none;
+    }
+}
+
+.nickname-container {
+    padding: 12px;
+    padding-left: 25px;
+    background-color: #5B3C7F;
+    margin-left: -25px;
+    width: 100%;
+    border-top-right-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+    border: 3px solid $primary-color;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 1024px) {
+        padding: 2px;
+        padding-left: 12px;
+        margin-left: -12px;
+    }
+}
+
+.nickname-container-disconnected {
+    border: 3px solid grey;
+}
+
+.disconnected {
+    opacity: 0.5;
+}
+
+.nickname-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}

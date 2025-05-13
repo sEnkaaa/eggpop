@@ -1,0 +1,6 @@
+FROM gradle:8.14.0-jdk21
+
+WORKDIR /app
+COPY . /app
+
+CMD ["gradle", "bootRun", "--no-daemon"]

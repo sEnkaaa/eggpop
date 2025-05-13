@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import styles from './vote-results.module.scss'
 import useApp from "../../../../../utils/hooks/useApp"
 import useGame from "../../../../../utils/hooks/useGame"
@@ -10,6 +11,7 @@ type VoteResult = {
 }
 
 const VoteResults: React.FC = () => {
+    const { t } = useTranslation()
     const { ws } = useApp()
     const { room } = useGame()
 
@@ -48,7 +50,7 @@ const VoteResults: React.FC = () => {
     return (
         <div className={styles['vote-results']}>
             <div className={styles['results-title']}>
-                {`Résultats du round ${room.round}/4`}
+                {`${t('game.vote_results.round_results')} ${room.round}/4`}
             </div>
 
             <div className={styles['result-content']}>

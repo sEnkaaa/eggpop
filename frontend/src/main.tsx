@@ -7,6 +7,7 @@ import AppProvider from './utils/contexts/AppContext'
 import GameProvider from './utils/contexts/GameContext'
 import { BrowserRouter as Router } from "react-router-dom"
 import Notification from './components/UI/Notification'
+import './utils/i18n'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 

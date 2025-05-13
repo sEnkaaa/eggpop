@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { useTranslation } from 'react-i18next'
 
 import styles from "./game-info.module.scss"
 import Panel from "../../../../components/UI/Panel"
@@ -7,55 +8,8 @@ import useApp from "../../../../utils/hooks/useApp"
 import useGame from "../../../../utils/hooks/useGame"
 import { useNavigate } from "react-router-dom"
 
-const slides = [
-  {
-    text: (
-      <div>
-        Crée une partie ou rejoins-en une.<br />
-        Rassemble ta bande et prépare-toi à pondre du lourd !
-      </div>
-    ),
-    image: "/assets/how_to/1.png"
-  },
-  {
-    text: (
-      <div>
-        Tout le monde regarde le même extrait en même temps 📽️<br />
-        Ouvre grand les yeux, il passe deux fois !
-      </div>
-    ),
-    image: "/assets/how_to/2.png"
-  },
-  {
-    text: (
-      <div>
-        Invente la phrase la plus marrante pour ton extrait 🎯<br />
-        (Tu peux être sérieux... ou complètement stupide 🤪)
-      </div>
-    ),
-    image: "/assets/how_to/3.png"
-  },
-  {
-    text: (
-      <div>
-        Découvrez les sous-titres de tout le monde 😂<br />
-        Prépare-toi pour des moments mythiques !
-      </div>
-    ),
-    image: "/assets/how_to/4.png"
-  },
-  {
-    text: (
-      <div>
-        Vote pour ton sous-titre préféré 🗳️<br />
-        À la fin : Oeuf en or... et fous rires garantis !
-      </div>
-    ),
-    image: "/assets/how_to/5.png"
-  },
-]
-
 const GameInfo: React.FC = () => {
+  const { t } = useTranslation()
   const [currentSlide, setCurrentSlide] = useState(0)
   const [resetKey, setResetKey] = useState(0)
 
@@ -78,12 +32,61 @@ const GameInfo: React.FC = () => {
     setResetKey((prevKey) => prevKey + 1)
   }
 
+  const slides = [
+    {
+      text: (
+        <div>
+          {t('home.game_info.slider.slide_1.sentence_1')}<br />
+          {t('home.game_info.slider.slide_1.sentence_2')}
+        </div>
+      ),
+      image: "/assets/how_to/1.png"
+    },
+    {
+      text: (
+        <div>
+          {t('home.game_info.slider.slide_2.sentence_1')}<br />
+          {t('home.game_info.slider.slide_2.sentence_2')}
+        </div>
+      ),
+      image: "/assets/how_to/2.png"
+    },
+    {
+      text: (
+        <div>
+          {t('home.game_info.slider.slide_3.sentence_1')}<br />
+          {t('home.game_info.slider.slide_3.sentence_2')}
+        </div>
+      ),
+      image: "/assets/how_to/3.png"
+    },
+    {
+      text: (
+        <div>
+          {t('home.game_info.slider.slide_4.sentence_1')}<br />
+          {t('home.game_info.slider.slide_4.sentence_2')}
+        </div>
+      ),
+      image: "/assets/how_to/4.png"
+    },
+    {
+      text: (
+        <div>
+          {t('home.game_info.slider.slide_5.sentence_1')}<br />
+          {t('home.game_info.slider.slide_5.sentence_2')}
+        </div>
+      ),
+      image: "/assets/how_to/5.png"
+    },
+  ]
+
+
   return (
     <div className={styles['game-info']}>
       <Panel
         header={
           <div className='heading-1'>
-            À toi de jouer !
+            {t('home.game_info.title')}
           </div>
         }
       >
@@ -127,7 +130,7 @@ const GameInfo: React.FC = () => {
               }}
               loading={creatingRoom}
             >
-              Créer une partie
+              {t('home.game_info.create_room')}
             </Button>
             <Button
               buttonType="secondary"
@@ -137,7 +140,7 @@ const GameInfo: React.FC = () => {
                 navigate('/join')
               }}
             >
-              Rejoindre  des amis
+              {t('home.game_info.join_room')}
             </Button>
           </div>
         </div> 

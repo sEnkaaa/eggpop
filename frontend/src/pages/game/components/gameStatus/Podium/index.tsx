@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import styles from './podium.module.scss'
 import useGame from "../../../../../utils/hooks/useGame"
 import Button from "../../../../../components/UI/Button"
 import useApp from "../../../../../utils/hooks/useApp"
 
 const Podium: React.FC = () => {
+  const { t } = useTranslation()
   const { room } = useGame()
   const {ws} = useApp()
   const [orderedPlayers, setOrderedPlayers] = useState([])
@@ -36,7 +38,9 @@ const Podium: React.FC = () => {
 
   return (
     <div className={styles.podium}>
-        <h1>Classement</h1>
+        <h1>
+          {t('game.podium.title')}
+        </h1>
         <div className={styles['players-container']}>
             {orderedPlayers.map((player, idx) => (
                 <div
@@ -61,7 +65,7 @@ const Podium: React.FC = () => {
               ws.send(`/app/rooms/${room?.id}/restart`)
             }}
           >
-              Play again
+            {t('game.podium.play_again')}
           </Button>
         </div>
     </div>

@@ -1,4 +1,5 @@
 import React from "react"
+import { useTranslation } from "react-i18next"
 import classNames from 'classnames'
 import Panel from "../../../../../components/UI/Panel"
 import useGame from "../../../../../utils/hooks/useGame"
@@ -7,7 +8,7 @@ import styles from './player-list.module.scss'
 import Dropdown from "../../../../../components/UI/Dropdown"
 
 const PlayerList: React.FC = () => {
-
+    const { t } = useTranslation()
     const {ws} = useApp()
     const {room} = useGame()
 
@@ -16,7 +17,9 @@ const PlayerList: React.FC = () => {
     return (
         <Panel
             header={
-                <div>Players</div>
+                <div>
+                    {t('game.common.player_list.title')}
+                </div>
             }
         >
             <div className={styles["player-list"]}>
@@ -63,11 +66,11 @@ const PlayerList: React.FC = () => {
                                     }
                                     items={[
                                     {
-                                        label: "Expulser",
+                                        label: t('game.common.player_list.actions.kick'),
                                         onClick: () => ws.send(`/app/rooms/${room.id}/kick`, player.id)
                                     },
                                     {
-                                        label: "Nommer chef",
+                                        label: t('game.common.player_list.actions.make_leader'),
                                         onClick: () => ws.send(`/app/rooms/${room.id}/make-leader`, player.id)
                                     }
                                     ]}

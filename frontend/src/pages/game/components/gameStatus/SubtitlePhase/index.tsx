@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 import styles from './subtitle-phase.module.scss'
 import useApp from "../../../../../utils/hooks/useApp"
 import Button from "../../../../../components/UI/Button"
@@ -6,6 +7,7 @@ import useGame from "../../../../../utils/hooks/useGame"
 import Input from "../../../../../components/UI/Input"
 
 const SubtitlePhase: React.FC = () => {
+    const { t } = useTranslation()
     const [timer, setTimer] = useState(60)
     const [inputValue, setInputValue] = useState('')
     const [hasFinishedWriting, setHasFinishedWriting] = useState(false)
@@ -27,11 +29,15 @@ const SubtitlePhase: React.FC = () => {
     return (
         <div className={styles['subtitle-phase']}>
             { hasFinishedWriting ? (
-                <div>WAITING</div>
+                <div>
+                    {t('words.waiting')}
+                </div>
             ) : (
                 <>
                     <div className={styles['timer']}>
-                        <div>Temps restant</div>
+                        <div>
+                            {t('game.subtitle_phase.remaining_time')}
+                        </div>
                         <div
                             className={styles['digits']}
                         >
@@ -39,7 +45,9 @@ const SubtitlePhase: React.FC = () => {
                         </div>
                     </div>
                     <div className={styles['input-container']}>
-                        <div>Ecris ta meilleure punchline !</div>
+                        <div>
+                            {t('game.subtitle_phase.write_your_best_subtitle')}
+                        </div>
                         <Input
                             value={inputValue}
                             onChange={(e) => {
@@ -56,7 +64,7 @@ const SubtitlePhase: React.FC = () => {
                                 }   
                             }}
                         >
-                            Valider
+                            {t('words.validate')}
                         </Button>
                     </div>
                 </>

@@ -1,4 +1,5 @@
 import React from "react"
+import { useTranslation } from "react-i18next"
 import Panel from "../../../../components/UI/Panel"
 import styles from "./game-info.module.scss"
 import Input from "../../../../components/UI/Input"
@@ -8,7 +9,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import useGame from "../../../../utils/hooks/useGame"
 
 const GameInfo: React.FC = () => {
-    
+    const { t } = useTranslation()
     const {
         ws,
         nickname,
@@ -48,7 +49,7 @@ const GameInfo: React.FC = () => {
             <Panel
                 header={
                 <div className='heading-1'>
-                    Rejoins des amis pour jouer !
+                    {t('join.game_info.title')}
                 </div>
                 }
             >
@@ -69,7 +70,7 @@ const GameInfo: React.FC = () => {
                             disabled={!(!!nickname && !!code)}
                             onClick={handleJoinRoom}
                         >
-                            Rejoindre la partie
+                            {t('join.game_info.join_room')}
                         </Button>
                     </div>
                 </div>

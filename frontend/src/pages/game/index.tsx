@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react"
+import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from 'react-router-dom'
 import PlayerList from "./components/common/PlayerList"
 import styles from "./game.module.scss"
@@ -14,14 +15,11 @@ import VoteResults from "./components/gameStatus/VoteResults"
 import Podium from "./components/gameStatus/Podium"
 
 const GamePage: React.FC = () => {
-
+    const { t } = useTranslation()
     const [loading, setLoading] = useState(true)
-
     const {id: roomId} = useParams()
-
     const {ws} = useApp()
     const {room, setRoom} = useGame()
-
     const navigate = useNavigate()
     
     useEffect(() => {
@@ -63,7 +61,7 @@ const GamePage: React.FC = () => {
                     className={styles['spinner']}
                 />
                 <div>
-                    LOADING
+                    {t('words.loading')}
                 </div>
             </div>
         )
@@ -85,7 +83,7 @@ const GamePage: React.FC = () => {
             case "PODIUM":
                 return <Podium /> 
             default:
-                return <div>Statut inconnu</div>
+                return <div>{t('words.unknown')}</div>
         }
     }
 

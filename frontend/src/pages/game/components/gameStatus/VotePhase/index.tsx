@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 import styles from './vote-phase.module.scss'
 import useApp from "../../../../../utils/hooks/useApp"
 import Button from "../../../../../components/UI/Button"
 import useGame from "../../../../../utils/hooks/useGame"
-import Input from "../../../../../components/UI/Input"
 
 const VotePhase: React.FC = () => {
+    const { t } = useTranslation()
     const [timer, setTimer] = useState(60)
     const [playerVoted, setPlayerVoted] = useState(false)
     const {ws} = useApp()
@@ -26,7 +27,9 @@ const VotePhase: React.FC = () => {
     return (
         <div className={styles['vote-phase']}>
             <div className={styles['timer']}>
-                <div>Temps restant</div>
+                <div>
+                    {t('game.vote_phase.remaining_time')}
+                </div>
                 <div
                     className={styles['digits']}
                 >
@@ -34,7 +37,9 @@ const VotePhase: React.FC = () => {
                 </div>
             </div>
             {playerVoted ? (
-                <div>WAITING</div>
+                <div>
+                    {t('words.waiting')}
+                </div>
             ) : (
                 <div className={styles['player-inputs-container']}>
                     {room?.shuffledPlayerInputs?.map((playerInput) => (

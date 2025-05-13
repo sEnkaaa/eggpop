@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-
+import { useTranslation } from 'react-i18next'
 import styles from './character-select.module.scss'
 import Input from "../UI/Input"
 import useApp from "../../utils/hooks/useApp"
@@ -21,6 +21,7 @@ export const characters = [
 
 const CharacterSelect: React.FC<CharacterSelectProps> = () => {
   const { nickname, setNickname, avatar, setAvatar } = useApp()
+  const { t } = useTranslation()
 
    const [index, setIndex] = useState(() => {
     const existingIndex = characters.findIndex(c => c === avatar)
@@ -76,12 +77,12 @@ const CharacterSelect: React.FC<CharacterSelectProps> = () => {
         </div>
       </div>
       <Input
-        placeholder="Enter your name"
+        placeholder={t('components.character_select.placeholder')}
         maxLength={30}
         onClick={handleSelectAll}
         onChange={(e) => setNickname(e.target.value)}
         value={nickname}
-        error={!!nickname ? undefined : "Please enter a name"}
+        error={!!nickname ? undefined : t('components.character_select.error.empty_nickname')}
       />
     </div>
   )

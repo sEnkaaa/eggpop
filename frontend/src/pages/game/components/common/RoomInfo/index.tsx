@@ -1,10 +1,12 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import Panel from '../../../../../components/UI/Panel'
 import styles from './room-info.module.scss'
 import { useToggle } from 'ahooks'
 import Button from '../../../../../components/UI/Button'
 
 const RoomInfo: React.FC = (props) => {
+    const { t } = useTranslation()
     const { roomId } = props
     const [isCodeVisible, { toggle }] = useToggle(false)
 
@@ -13,7 +15,9 @@ const RoomInfo: React.FC = (props) => {
             <Panel>
                 <div className={styles["room-info"]}>
                     <div className={styles["code-container"]}>
-                        <div>ROOM CODE</div>
+                        <div>
+                            {t('game.common.room_info.code')}
+                        </div>
                         {isCodeVisible ? (
                             <div
                                 className={styles["code"]}
@@ -26,12 +30,12 @@ const RoomInfo: React.FC = (props) => {
                                 size='small'
                                 onClick={toggle}
                             >
-                                Click to show
+                                {t('game.common.room_info.click_to_show')}
                             </Button>
                         )}
                     </div>
                     <div className={styles["link-container"]}>
-                        Click here to copy the link 🔗
+                        {t('game.common.room_info.click_to_copy')}
                     </div>
                 </div>
             </Panel>

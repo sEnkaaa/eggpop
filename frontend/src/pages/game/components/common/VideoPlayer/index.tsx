@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react"
+import { useTranslation } from "react-i18next"
 import classNames from "classnames"
 import styles from './video-player.module.scss'
 import useGame from "../../../../../utils/hooks/useGame"
@@ -6,6 +7,7 @@ import Button from "../../../../../components/UI/Button"
 import useApp from "../../../../../utils/hooks/useApp"
 
 const VideoPlayer: React.FC<{ onClipsWatched?: () => void }> = ({ onClipsWatched }) => {
+  const { t } = useTranslation()
   const {room} = useGame()
   const {ws} = useApp()
 
@@ -122,7 +124,7 @@ const VideoPlayer: React.FC<{ onClipsWatched?: () => void }> = ({ onClipsWatched
         <div className={styles.screen}>
           <div className={styles['overlay-text']}>
             <div className={styles.countdownText}>
-              {`Round ${room.round}/${room.maxRounds}`}
+              {`${t('game.watching.video_player.round')} ${room.round}/${room.maxRounds}`}
             </div>
             <div className={styles.countdown}>{currentTime}</div>
           </div>
@@ -140,13 +142,13 @@ const VideoPlayer: React.FC<{ onClipsWatched?: () => void }> = ({ onClipsWatched
               src={`/assets/clips/${room.currentClip}.mp4`}
               type="video/mp4"
             />
-            Votre navigateur ne prend pas en charge la vidéo.
+            {t('game.watching.video_player.unsupported')}
           </video>
 
           {showPlayButton && (
             <div className={styles['play-overlay']}>
               <Button onClick={handleManualPlay}>
-                ▶️ Lancer la vidéo
+                ▶️ {t('game.watching.video_player.play')}
               </Button>
             </div>
           )}
@@ -168,7 +170,7 @@ const VideoPlayer: React.FC<{ onClipsWatched?: () => void }> = ({ onClipsWatched
               onClick={handleSkipClip}
               size="small"
             >
-              ⏭ Skip
+              ⏭ {t('game.watching.video_player.skip')}
             </Button>
           </div>
         )}

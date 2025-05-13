@@ -1,0 +1,99 @@
+{
+    "words": {
+        "loading": "Chargement",
+        "unknown": "Inconnu",
+        "waiting": "En attente",
+        "validate": "Valider"
+    },
+    "components": {
+        "character_select": {
+            "placeholder": "Écris ton pseudo",
+            "error": {
+                "empty_nickname": "Entre un pseudo"
+            }
+        }
+    },
+    "home": {
+        "player_setup": {
+            "select_character": "Choisis ton personnage"
+        },
+        "game_info": {
+            "title": "À toi de jouer !",
+            "slider": {
+                "slide_1": {
+                    "sentence_1": "Crée une partie ou rejoins-en une.",
+                    "sentence_2": "Rassemble ta bande et prépare-toi à pondre du lourd !"
+                },
+                "slide_2": {
+                    "sentence_1": "Tout le monde regarde le même extrait en même temps 📽️",
+                    "sentence_2": "Ouvre grand les yeux, il passe deux fois !"
+                },
+                "slide_3": {
+                    "sentence_1": "Invente la phrase la plus marrante pour ton extrait 🎯",
+                    "sentence_2": "(Tu peux être sérieux... ou complètement stupide 🤪)"
+                },
+                "slide_4": {
+                    "sentence_1": "Découvrez les sous-titres de tout le monde 😂",
+                    "sentence_2": "Prépare-toi pour des moments mythiques !"
+                },
+                "slide_5": {
+                    "sentence_1": "Vote pour ton sous-titre préféré 🗳️",
+                    "sentence_2": "À la fin : Oeuf en or... et fous rires garantis !"
+                }
+            },
+            "create_room": "Créer une partie",
+            "join_room": "Rejoindre des amis"
+        }
+    },
+    "join": {
+        "game_info": {
+            "title": "Rejoins des amis pour jouer !",
+            "join_room": "Rejoindre une partie"
+        },
+        "player_setup": {
+            "select_character": "Choisis ton personnage"
+        }
+    },
+    "game": {
+        "common": {
+            "room_info": {
+                "code": "Code",
+                "click_to_show": "Clique pour afficher",
+                "click_to_copy": "Clique pour copier le lien"
+            },
+            "player_list": {
+                "title": "Joueurs",
+                "actions": {
+                    "kick": "Expulser",
+                    "make_leader": "Nommer chef"
+                }
+            }
+        },
+        "lobby": {
+            "waiting": "En attente de l'hôte pour démarrer..."
+        },
+        "podium": {
+            "title": "Classement",
+            "play_again": "Rejouer"
+        },
+        "subtitle_phase": {
+            "remaining_time": "Temps restant",
+            "write_your_best_subtitle": "Ponds-nous ton meilleur sous-titre !"
+        }, 
+        "vote_phase": {
+            "remaining_time": "Temps restant"
+        },
+        "vote_results": {
+            "round_results": "Résultats du tout"
+        },
+        "watching": {
+            "waiting":"En attente de...",
+            "video_player": {
+                "unsupported": "Votre navigateur ne prend pas en charge la vidéo.",
+                "skip": "Passer",
+                "start": "Démarrer la vidéo",
+                "round": "Tour"
+            }
+        }
+    }
+}

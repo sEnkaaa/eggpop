@@ -7,6 +7,9 @@ import org.springframework.messaging.simp.stomp.StompCommand
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor
 import org.springframework.messaging.support.ChannelInterceptor
 import org.springframework.messaging.support.MessageHeaderAccessor
+import mu.KotlinLogging
+
+private val logger = KotlinLogging.logger {}
 
 @Component
 class WebsocketAuthChannelInterceptor : ChannelInterceptor {
@@ -18,14 +21,14 @@ class WebsocketAuthChannelInterceptor : ChannelInterceptor {
             val nativeHeaders = accessor.toNativeHeaderMap()
             val sessionToken = accessor.getFirstNativeHeader("X-SESSION-TOKEN")
 
-            println("[WS] Interceptor: All native headers -> $nativeHeaders")
-            println("[WS] Interceptor: X-SESSION-TOKEN -> $sessionToken")
+            logger.info { "[WS] Interceptor: All native headers -> $nativeHeaders" }
+            logger.info { "[WS] Interceptor: X-SESSION-TOKEN -> $sessionToken" }
 
             if (!sessionToken.isNullOrBlank()) {
                 accessor.sessionAttributes?.put("SESSIONTOKEN", sessionToken)
-                println("[WS] Interceptor: SESSIONTOKEN added to sessionAttributes")
+                logger.info { "[WS] Interceptor: SESSIONTOKEN added to sessionAttributes" }
             } else {
-                println("[WS] Interceptor: SESSIONTOKEN missing!")
+                logger.warn { "[WS] Interceptor: SESSIONTOKEN missing!" }
             }
         }
 

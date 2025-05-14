@@ -21,6 +21,9 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import java.util.UUID
+import mu.KotlinLogging
+
+private val logger = KotlinLogging.logger {}
 
 @Controller
 class RoomController(
@@ -36,13 +39,13 @@ class RoomController(
     ) {
         val sessionId = headerAccessor.sessionAttributes?.get("SESSIONID") as? String
         if (sessionId.isNullOrBlank()) {
-            println("[WS] SESSIONID not found in session attributes")
+            logger.warn { "[WS] SESSIONID not found in session attributes" }
             return
         }
 
         val sessionToken = headerAccessor.sessionAttributes?.get("SESSIONTOKEN") as? String
         if (sessionToken.isNullOrBlank()) {
-            println("[WS] SESSIONTOKEN not found in session attributes")
+            logger.warn { "[WS] SESSIONTOKEN not found in session attributes" }
             return
         }
 
@@ -55,7 +58,7 @@ class RoomController(
             isLeader = true
         )
         val room: Room = gameService.createRoom(creator)
-        println("[WS] Room created. Total rooms: ${gameService.getRooms().size}")
+        logger.info { "[WS] Room created. Total rooms: ${gameService.getRooms().size}" }
 
         val personalizedRoom = room.copy(
             players = room.players.map { p ->
@@ -74,25 +77,25 @@ class RoomController(
     ) {
         val sessionId = headerAccessor.sessionAttributes?.get("SESSIONID") as? String
         if (sessionId.isNullOrBlank()) {
-            println("[WS] SESSIONID is missing in session attributes")
+            logger.warn { "[WS] SESSIONID is missing in session attributes" }
             return
         }
 
         val room = gameService.getRoomById(roomId) ?: return
         val leader = room.players.find { it.sessionId == sessionId }
         if (leader == null || !leader.isLeader) {
-            println("[WS] Unauthorized kick attempt by sessionId=$sessionId in room $roomId")
+            logger.warn { "[WS] Unauthorized kick attempt by sessionId=$sessionId in room $roomId" }
             return
         }
 
         val playerToKick = room.players.find { it.id == playerId }
         if (playerToKick == null) {
-            println("[WS] Player to kick not found: $playerId")
+            logger.warn { "[WS] Player to kick not found: $playerId" }
             return
         }
 
         room.players.remove(playerToKick)
-        println("🚪 Player ${playerToKick.nickname} has been kicked from room $roomId")
+        logger.info { "[WS] 🚪 Player ${playerToKick.nickname} has been kicked from room $roomId" }
 
         messagingTemplate.convertAndSend("/user/${playerToKick.sessionToken}/error", "You have been kicked from the room.")
 
@@ -111,20 +114,20 @@ class RoomController(
     ) {
         val sessionId = headerAccessor.sessionAttributes?.get("SESSIONID") as? String
         if (sessionId.isNullOrBlank()) {
-            println("[WS] SESSIONID is missing in session attributes")
+            logger.warn { "[WS] SESSIONID is missing in session attributes" }
             return
         }
 
         val room = gameService.getRoomById(roomId) ?: return
         val currentLeader = room.players.find { it.sessionId == sessionId }
         if (currentLeader == null || !currentLeader.isLeader) {
-            println("[WS] Unauthorized leader change attempt by sessionId=$sessionId in room $roomId")
+            logger.warn { "[WS] Unauthorized leader change attempt by sessionId=$sessionId in room $roomId" }
             return
         }
 
         val newLeader = room.players.find { it.id == playerId }
         if (newLeader == null) {
-            println("[WS] New leader not found: $playerId")
+            logger.warn { "[WS] New leader not found: $playerId" }
             return
         }
 
@@ -133,11 +136,10 @@ class RoomController(
             messagingTemplate.convertAndSend("/user/${it.sessionToken}/info", "${newLeader.nickname} is now the new leader.")
         }
         newLeader.isLeader = true
-        println("👑 ${newLeader.nickname} is now the leader of room $roomId")
+        logger.info { "👑 ${newLeader.nickname} is now the leader of room $roomId" }
 
         sendRoomToAllPlayers(room)
     }
-
 
     @MessageMapping("/rooms/get")
     fun getRoom(
@@ -146,32 +148,32 @@ class RoomController(
     ) {
         val sessionId = headerAccessor.sessionAttributes?.get("SESSIONID") as? String
         if (sessionId.isNullOrBlank()) {
-            println("[WS] SESSIONID is missing in session attributes")
+            logger.warn { "[WS] SESSIONID is missing in session attributes" }
             return
         }
 
         val sessionToken = headerAccessor.sessionAttributes?.get("SESSIONTOKEN") as? String
         if (sessionToken.isNullOrBlank()) {
-            println("[WS] SESSIONTOKEN is missing in session attributes")
+            logger.warn { "[WS] SESSIONTOKEN is missing in session attributes" }
             return
         }
 
         if (roomId.isBlank()) {
-            println("[WS] Room ID is missing or blank in the payload")
+            logger.warn { "[WS] Room ID is missing or blank in the payload" }
             messagingTemplate.convertAndSend("/user/$sessionToken/error", "Missing room ID")
             return
         }
 
         val room = gameService.getRooms().find { it.id == roomId }
         if (room == null) {
-            println("[WS] Room not found for ID: $roomId")
+            logger.warn { "[WS] Room not found for ID: $roomId" }
             messagingTemplate.convertAndSend("/user/$sessionToken/error", "Room not found")
             return
         }
 
         val player = room.players.find { it.sessionId == sessionId }
         if (player == null) {
-            println("[WS] Player with sessionId=$sessionId not in room $roomId")
+            logger.warn { "[WS] Player with sessionId=$sessionId not in room $roomId" }
             messagingTemplate.convertAndSend("/user/$sessionToken/error", "Unauthorized access")
             return
         }
@@ -199,34 +201,34 @@ class RoomController(
     ) {
         val sessionId = headerAccessor.sessionAttributes?.get("SESSIONID") as? String
         if (sessionId.isNullOrBlank()) {
-            println("[WS] SESSIONID is missing in session attributes")
+            logger.warn { "[WS] SESSIONID is missing in session attributes" }
             return
         }
 
         val sessionToken = headerAccessor.sessionAttributes?.get("SESSIONTOKEN") as? String
         if (sessionToken.isNullOrBlank()) {
-            println("[WS] SESSIONTOKEN is missing in session attributes")
+            logger.warn { "[WS] SESSIONTOKEN is missing in session attributes" }
             return
         }
 
         val roomId = payload.roomId.lowercase()
 
         if (roomId.isBlank()) {
-            println("[WS] Room ID is missing or blank in the payload")
+            logger.warn { "[WS] Room ID is missing or blank in the payload" }
             messagingTemplate.convertAndSend("/user/$sessionToken/error", "Missing room ID")
             return
         }
 
         val room = gameService.getRooms().find { it.id == roomId }
         if (room == null) {
-            println("[WS] Room not found for ID: $roomId")
+            logger.warn { "[WS] Room not found for ID: $roomId" }
             messagingTemplate.convertAndSend("/user/$sessionToken/error", "Room not found")
             return
         }
 
         val player = room.players.find { it.sessionId == sessionId }
         if (player != null) {
-            println("[WS] Player with sessionId=$sessionId is already in $roomId")
+            logger.warn { "[WS] Player with sessionId=$sessionId is already in $roomId" }
             messagingTemplate.convertAndSend("/user/$sessionToken/error", "Already in the room")
             return
         }
@@ -243,24 +245,24 @@ class RoomController(
         messagingTemplate.convertAndSend("/user/$sessionToken/room/$roomId/joined", room)
 
         sendRoomToAllPlayers(room)
-        println("[WS] Player with sessionId=$sessionId joined room $roomId")
+        logger.info { "[WS] Player with sessionId=$sessionId joined room $roomId" }
     }
 
     @MessageMapping("/rooms/{roomId}/start")
     fun startGame(@DestinationVariable roomId: String) {
-        println("▶️ startGame triggered for roomId: $roomId")
+        logger.info { "[WS] ▶️ startGame triggered for roomId: $roomId" }
         val room = gameService.getRoomById(roomId)
         if (room == null) {
-            println("❌ No room found for id: $roomId")
+            logger.error { "[WS] ❌ No room found for id: $roomId" }
             return
         }
 
-        println("✅ Room found: ${room.id} with ${room.players.size} players")
+        logger.info { "[WS] ✅ Room found: ${room.id} with ${room.players.size} players" }
         loadRandomClipAndSubtitles(room)
 
         room.players.forEach { it.isWatching = true }
         room.status = RoomStatus.WATCHING_CLIP
-        println("📺 Room status set to WATCHING_CLIP")
+        logger.info { "[WS] 📺 Room status set to WATCHING_CLIP" }
 
         sendRoomToAllPlayers(room)
     }
@@ -272,24 +274,24 @@ class RoomController(
     ) {
         val sessionId = headerAccessor.sessionAttributes?.get("SESSIONID") as? String
         if (sessionId.isNullOrBlank()) {
-            println("[WS] SESSIONID is missing in session attributes")
+            logger.error { "[WS] SESSIONID is missing in session attributes" }
             return
         }
 
         val room = gameService.getRoomById(roomId) ?: return
 
         if (room.status != RoomStatus.WATCHING_CLIP) {
-            println("⚠️ La room $roomId n'est pas dans le statut WATCHING_CLIP, changement de clip refusé.")
+            logger.warn { "[WS] ⚠️ La room $roomId n'est pas dans le statut WATCHING_CLIP, changement de clip refusé." }
             return
         }
 
         val player = room.players.find { it.sessionId == sessionId }
         if (player == null || !player.isLeader) {
-            println("❌ Le joueur $sessionId n'est pas leader ou introuvable, changement de clip refusé.")
+            logger.error { "[WS] ❌ Le joueur $sessionId n'est pas leader ou introuvable, changement de clip refusé." }
             return
         }
 
-        println("🔄 Le leader ${player.nickname} demande un nouveau clip pour la room $roomId.")
+        logger.info { "[WS] 🔄 Le leader ${player.nickname} demande un nouveau clip pour la room $roomId." }
 
         loadRandomClipAndSubtitles(room)
         room.phaseEndTimestamp = null
@@ -304,29 +306,29 @@ class RoomController(
     ) {
         val sessionId = headerAccessor.sessionAttributes?.get("SESSIONID") as? String
         if (sessionId.isNullOrBlank()) {
-            println("[WS] SESSIONID is missing in session attributes")
+            logger.error { "[WS] SESSIONID is missing in session attributes" }
             return
         }
 
         val room = gameService.getRoomById(roomId) ?: return
 
         if (room.status != RoomStatus.WATCHING_CLIP) {
-            println("⚠️ La room $roomId n'est pas dans le statut WATCHING_CLIP, action ignorée.")
+            logger.warn { "[WS] ⚠️ La room $roomId n'est pas dans le statut WATCHING_CLIP, action ignorée." }
             return
         }
 
         val player = room.players.find { it.sessionId == sessionId }
         if (player == null) {
-            println("⚠️ Aucun joueur trouvé pour session $sessionId dans la room $roomId")
+            logger.warn { "[WS] ⚠️ Aucun joueur trouvé pour session $sessionId dans la room $roomId" }
             return
         }
 
         player.isWatching = false
-        println("🕒 Player ${player.nickname} a terminé de regarder la vidéo.")
+        logger.info { "[WS] 🕒 Player ${player.nickname} a terminé de regarder la vidéo." }
 
         if (room.players.all { !it.isWatching }) {
             room.status = RoomStatus.SUBTITLE_PHASE
-            println("🎉 Tous les joueurs ont terminé la vidéo, le statut de la room passe à SUBTITLE_PHASE")
+            logger.info { "[WS] 🎉 Tous les joueurs ont terminé la vidéo, le statut de la room passe à SUBTITLE_PHASE" }
             room.phaseEndTimestamp = System.currentTimeMillis() + 60_000
 
             val scheduler = Executors.newSingleThreadScheduledExecutor()
@@ -347,20 +349,20 @@ class RoomController(
     ) {
         val sessionId = headerAccessor.sessionAttributes?.get("SESSIONID") as? String
         if (sessionId.isNullOrBlank()) {
-            println("[WS] SESSIONID is missing in session attributes")
+            logger.error { "[WS] SESSIONID is missing in session attributes" }
             return
         }
         
         val room = gameService.getRoomById(roomId) ?: return
 
         if (room.status != RoomStatus.SUBTITLE_PHASE) {
-            println("⚠️ La room $roomId n'est pas dans le statut SUBTITLE_PHASE, action ignorée.")
+            logger.warn { "[WS] ⚠️ La room $roomId n'est pas dans le statut SUBTITLE_PHASE, action ignorée." }
             return
         }
 
         val player = room.players.find { it.sessionId == sessionId }
         if (player == null) {
-            println("⚠️ Aucun joueur trouvé pour session $sessionId dans la room $roomId")
+            logger.warn { "[WS] ⚠️ Aucun joueur trouvé pour session $sessionId dans la room $roomId" }
             return
         }
 
@@ -375,25 +377,25 @@ class RoomController(
     ) {
         val sessionId = headerAccessor.sessionAttributes?.get("SESSIONID") as? String
         if (sessionId.isNullOrBlank()) {
-            println("[WS] SESSIONID is missing in session attributes")
+            logger.error { "[WS] SESSIONID is missing in session attributes" }
             return
         }
         
         val room = gameService.getRoomById(roomId) ?: return
         if (room.status != RoomStatus.SUBTITLE_PHASE) {
-            println("⚠️ La room $roomId n'est pas dans le statut SUBTITLE_PHASE, action ignorée.")
+            logger.warn { "[WS] ⚠️ La room $roomId n'est pas dans le statut SUBTITLE_PHASE, action ignorée." }
             return
         }
 
         val player = room.players.find { it.sessionId == sessionId }
         if (player == null) {
-            println("⚠️ Aucun joueur trouvé pour session $sessionId dans la room $roomId")
+            logger.warn { "[WS] ⚠️ Aucun joueur trouvé pour session $sessionId dans la room $roomId" }
             return
         }
         player.hasSubtitleReady = true
         val allReady = room.players.all { it.hasSubtitleReady }
         if (allReady) {
-            println("✅ Tous les joueurs ont indiqué qu'ils ont terminé")
+            logger.info { "[WS] ✅ Tous les joueurs ont indiqué qu'ils ont terminé" }
             transitionToWatchAllClips(room)
         }
         sendRoomToAllPlayers(room)
@@ -406,29 +408,29 @@ class RoomController(
     ) {
         val sessionId = headerAccessor.sessionAttributes?.get("SESSIONID") as? String
         if (sessionId.isNullOrBlank()) {
-            println("[WS] SESSIONID is missing in session attributes")
+            logger.error { "[WS] SESSIONID is missing in session attributes" }
             return
         }
 
         val room = gameService.getRoomById(roomId) ?: return
 
         if (room.status != RoomStatus.WATCHING_ALL_CLIPS) {
-            println("⚠️ La room $roomId n'est pas dans le statut WATCHING_ALL_CLIPS, action ignorée.")
+            logger.warn { "[WS] ⚠️ La room $roomId n'est pas dans le statut WATCHING_ALL_CLIPS, action ignorée." }
             return
         }
 
         val player = room.players.find { it.sessionId == sessionId }
         if (player == null) {
-            println("⚠️ Aucun joueur trouvé pour session $sessionId dans la room $roomId")
+            logger.warn { "[WS] ⚠️ Aucun joueur trouvé pour session $sessionId dans la room $roomId" }
             return
         }
 
         player.isWatching = false
-        println("🕒 Player ${player.nickname} a terminé de regarder la vidéo.")
+        logger.info { "[WS] 🕒 Player ${player.nickname} a terminé de regarder la vidéo." }
 
         if (room.players.all { !it.isWatching }) {
             room.status = RoomStatus.VOTE_PHASE
-            println("🎉 Tous les joueurs ont terminé la vidéo, le statut de la room passe à VOTE_PHASE")
+            logger.info { "[WS] 🎉 Tous les joueurs ont terminé la vidéo, le statut de la room passe à VOTE_PHASE" }
             room.phaseEndTimestamp = System.currentTimeMillis() + 60_000
 
             val scheduler = Executors.newSingleThreadScheduledExecutor()
@@ -449,43 +451,43 @@ class RoomController(
     ) {
         val sessionId = headerAccessor.sessionAttributes?.get("SESSIONID") as? String
         if (sessionId.isNullOrBlank()) {
-            println("[WS] SESSIONID is missing in session attributes")
+            logger.error { "[WS] SESSIONID is missing in session attributes" }
             return
         }
         
         val room = gameService.getRoomById(roomId) ?: return
         if (room.status != RoomStatus.VOTE_PHASE) {
-            println("⚠️ La room $roomId n'est pas dans le statut VOTE_PHASE, action ignorée.")
+            logger.warn { "[WS] ⚠️ La room $roomId n'est pas dans le statut VOTE_PHASE, action ignorée." }
             return
         }
 
         val player = room.players.find { it.sessionId == sessionId }
         if (player == null) {
-            println("⚠️ Aucun joueur trouvé pour session $sessionId dans la room $roomId")
+            logger.warn { "[WS] ⚠️ Aucun joueur trouvé pour session $sessionId dans la room $roomId" }
             return
         }
         if (player.hasVoted) {
-            println("⚠️ Le joueur ${player.nickname} a déjà voté. Action ignorée.")
+            logger.warn { "[WS] ⚠️ Le joueur ${player.nickname} a déjà voté. Action ignorée." }
             return
         }
 
         val subtitle = room.shuffledPlayerInputs.find { it.id == playerSubtitleId }
         if (subtitle == null) {
-            println("⚠️ Aucun PlayerSubtitle trouvé avec l'id $playerSubtitleId dans la room $roomId")
+            logger.warn { "[WS] ⚠️ Aucun PlayerSubtitle trouvé avec l'id $playerSubtitleId dans la room $roomId" }
             return
         }
 
         if (subtitle.playerSessionId == sessionId) {
-            println("🚫 Le joueur ${player.nickname} a tenté de voter pour son propre sous-titre. Action ignorée.")
+            logger.warn { "[WS] 🚫 Le joueur ${player.nickname} a tenté de voter pour son propre sous-titre. Action ignorée." }
             return
         }
 
         player.hasVoted = true
         subtitle.voteCount += 1
-        println("✅ Vote enregistré pour subtitle ${subtitle.id} (total votes: ${subtitle.voteCount})")
+        logger.info { "[WS] ✅ Vote enregistré pour subtitle ${subtitle.id} (total votes: ${subtitle.voteCount})" }
 
         if (room.players.all { it.hasVoted }) {
-            println("🎯 Tous les joueurs ont voté, on passe directement à VOTE_RESULTS")
+            logger.info { "[WS] 🎯 Tous les joueurs ont voté, on passe directement à VOTE_RESULTS" }
             transitionToVoteResults(room)
         }
     }
@@ -497,19 +499,19 @@ class RoomController(
     ) {
         val sessionId = headerAccessor.sessionAttributes?.get("SESSIONID") as? String
         if (sessionId.isNullOrBlank()) {
-            println("[WS] SESSIONID is missing in session attributes")
+            logger.error { "[WS] SESSIONID is missing in session attributes" }
             return
         }
 
         val room = gameService.getRoomById(roomId) ?: return
         if (room.status != RoomStatus.VOTE_RESULTS) {
-            println("⚠️ La room $roomId n'est pas dans le statut VOTE_RESULTS, action ignorée.")
+            logger.warn { "[WS] ⚠️ La room $roomId n'est pas dans le statut VOTE_RESULTS, action ignorée." }
             return
         }
 
         val player = room.players.find { it.sessionId == sessionId } ?: return
         player.hasWatchedResults = true
-        println("👁️ Le joueur ${player.nickname} a vu les résultats.")
+        logger.info { "[WS] 👁️ Le joueur ${player.nickname} a vu les résultats." }
         transitionToNextRoundOrPodium(room)
     }
 
@@ -519,7 +521,7 @@ class RoomController(
         val selectedClip = when {
             availableClips.isNotEmpty() -> availableClips.random()
             allClips.isNotEmpty() -> {
-                println("🔁 Tous les clips ont été joués, réinitialisation...")
+                logger.info { "[WS] 🔁 Tous les clips ont été joués, réinitialisation..." }
                 room.playedClips.clear()
                 allClips.random()
             }
@@ -538,10 +540,10 @@ class RoomController(
                     endTime = it.endTime
                 )
             }
-            println("🎬 Clip sélectionné : ${selectedClip.filename}")
-            println("📜 ${room.subtitles.size} sous-titres chargés.")
+            logger.info { "[WS] 🎬 Clip sélectionné : ${selectedClip.filename}" }
+            logger.info { "[WS] 📜 ${room.subtitles.size} sous-titres chargés." }
         } else {
-            println("❌ Aucun clip disponible.")
+            logger.error { "[WS] ❌ Aucun clip disponible." }
         }
     }
 
@@ -562,10 +564,10 @@ class RoomController(
                 }
                 .shuffled()
             room.shuffledPlayerInputs = inputs
-            println("🎭 Inputs anonymisés et mélangés : $inputs")
+            logger.info { "[WS] 🎭 Inputs anonymisés et mélangés : $inputs" }
 
             if (inputs.isEmpty()) {
-                println("⚠️ Aucun input reçu, transition immédiate vers prochaine phase.")
+                logger.warn { "[WS] ⚠️ Aucun input reçu, transition immédiate vers prochaine phase." }
                 transitionToNextRoundOrPodium(room)
                 return
             }
@@ -575,7 +577,7 @@ class RoomController(
                 it.hasSubtitleReady = false
             }
             room.status = RoomStatus.WATCHING_ALL_CLIPS
-            println("🎬 Transition vers ${RoomStatus.WATCHING_ALL_CLIPS}")
+            logger.info { "[WS] 🎬 Transition vers ${RoomStatus.WATCHING_ALL_CLIPS}" }
             room.players.forEach {
                 messagingTemplate.convertAndSend("/user/${it.sessionToken}/room/${room.id}", room)
             }
@@ -594,7 +596,7 @@ class RoomController(
             val player = room.players.find { it.sessionId == subtitle.playerSessionId }
             if (player != null) {
                 player.points += subtitle.voteCount
-                println("🏅 ${player.nickname} gagne ${subtitle.voteCount} point(s), total = ${player.points}")
+                logger.info { "[WS] 🏅 ${player.nickname} gagne ${subtitle.voteCount} point(s), total = ${player.points}" }
             }
         }
 
@@ -606,10 +608,10 @@ class RoomController(
             room.round += 1
             room.status = RoomStatus.WATCHING_CLIP
             loadRandomClipAndSubtitles(room)
-            println("🔁 Round ${room.round} initialisé, envoi de la room à tous les joueurs.")
+            logger.info { "[WS] 🔁 Round ${room.round} initialisé, envoi de la room à tous les joueurs." }
         } else {
             room.status = RoomStatus.PODIUM
-            println("🏅 Room status set to podium")
+            logger.info { "[WS] 🏅 Room status set to podium" }
         }
 
         sendRoomToAllPlayers(room)
@@ -622,20 +624,20 @@ class RoomController(
     ) {
         val sessionId = headerAccessor.sessionAttributes?.get("SESSIONID") as? String
         if (sessionId.isNullOrBlank()) {
-            println("[WS] SESSIONID is missing in session attributes")
+            logger.warn { "[WS] SESSIONID is missing in session attributes" }
             return
         }
 
         val room = gameService.getRoomById(roomId) ?: return
 
         if (room.status != RoomStatus.PODIUM) {
-            println("⚠️ La room $roomId n'est pas dans le statut PODIUM, redémarrage refusé.")
+            logger.warn { "[WS] ⚠️ La room $roomId n'est pas dans le statut PODIUM, redémarrage refusé." }
             return
         }
 
         val player = room.players.find { it.sessionId == sessionId }
         if (player == null || !player.isLeader) {
-            println("❌ Le joueur $sessionId n'est pas leader ou introuvable, redémarrage refusé.")
+            logger.warn { "[WS] ❌ Le joueur $sessionId n'est pas leader ou introuvable, redémarrage refusé." }
             return
         }
 
@@ -658,7 +660,7 @@ class RoomController(
             p.input = ""
         }
 
-        println("🔁 Le leader ${player.nickname} a redémarré la room $roomId.")
+        logger.info { "[WS] 🔁 Le leader ${player.nickname} a redémarré la room $roomId." }
         sendRoomToAllPlayers(room)
     }
 
@@ -678,7 +680,7 @@ class RoomController(
                 }
             room.voteResults = results
             sendRoomToAllPlayers(room)
-            println("📊 Tous les votes sont traités, passage à VOTE_RESULTS")
+            logger.info { "[WS] 📊 Tous les votes sont traités, passage à VOTE_RESULTS" }
         }
     }
 
@@ -693,7 +695,7 @@ class RoomController(
                     subtitle.copy(isMine = subtitle.playerSessionId == player.sessionId)
                 }
             )
-            println("📡 Sending room state to player sessionToken=${player.sessionToken}")
+            logger.info { "[WS] 📡 Sending room state to player sessionToken=${player.sessionToken}" }
             messagingTemplate.convertAndSend("/user/${player.sessionToken}/room/${room.id}", personalizedRoom)
         }
     }

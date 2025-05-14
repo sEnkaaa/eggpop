@@ -13,7 +13,6 @@ const AppLayout: React.FC<Props> = (props) => {
   const {children} = props
   const navigate = useNavigate()
   const {avatar} = useApp()
-  console.log('pppapaapa', avatar)
 
   return (
     <div className={styles.layout}>

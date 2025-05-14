@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState, useRef, useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import classNames from "classnames"
 import styles from './video-player.module.scss'
@@ -8,25 +8,46 @@ import useApp from "../../../../../utils/hooks/useApp"
 
 const VideoPlayer: React.FC<{ onClipsWatched?: () => void }> = ({ onClipsWatched }) => {
   const { t } = useTranslation()
-  const {room} = useGame()
-  const {ws} = useApp()
+  const { room } = useGame()
+  const { ws } = useApp()
 
   const isWatchingAllClips = room?.status === 'WATCHING_ALL_CLIPS'
   const totalPlays = isWatchingAllClips ? (room?.shuffledPlayerInputs?.length || 0) : 2
 
-  const [phase, setPhase] = useState('fade')
+  const [phase, setPhase] = useState<'fade' | 'countdown' | 'playing' | 'done'>('fade')
   const [currentTime, setCurrentTime] = useState(3)
   const [playIndex, setPlayIndex] = useState(0)
   const [showPlayButton, setShowPlayButton] = useState(false)
-  const [currentSubtitle, setCurrentSubtitle] = useState(undefined)
+  const [currentSubtitle, setCurrentSubtitle] = useState<any>(undefined)
 
   const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    if (phase === 'fade') {
+      const timeout = setTimeout(() => setPhase('countdown'), 1000)
+      return () => clearTimeout(timeout)
+    }
+
+    if (phase === 'countdown') {
+      let timeLeft = 3
+      setCurrentTime(timeLeft)
+      const interval = setInterval(() => {
+        timeLeft -= 1
+        setCurrentTime(timeLeft)
+        if (timeLeft <= 0) {
+          clearInterval(interval)
+          setPhase('playing')
+        }
+      }, 1000)
+      return () => clearInterval(interval)
+    }
+  }, [phase])
 
   useEffect(() => {
     if (room?.status === 'WATCHING_CLIP') {
       setPhase('countdown')
     }
-  }, [room?.currentClip])
+  }, [room?.currentClip, room?.status])
 
   useEffect(() => {
     if (phase !== 'playing' || !videoRef.current) return
@@ -47,34 +68,16 @@ const VideoPlayer: React.FC<{ onClipsWatched?: () => void }> = ({ onClipsWatched
         setShowPlayButton(true)
       }
     }
+
     video.addEventListener('playing', handlePlaying)
     tryPlay()
+
     return () => {
       video.removeEventListener('playing', handlePlaying)
     }
-  }, [phase])
+  }, [phase, playIndex])
 
-  useEffect(() => {
-    if (phase === 'fade') {
-      const timeout = setTimeout(() => setPhase('countdown'), 1000)
-      return () => clearTimeout(timeout)
-    } else if (phase === 'countdown') {
-      let timeLeft = 3
-      setCurrentTime(timeLeft)
-      const interval = setInterval(() => {
-        timeLeft -= 1
-        setCurrentTime(timeLeft)
-
-        if (timeLeft <= 0) {
-          clearInterval(interval)
-          setPhase('playing')
-        }
-      }, 1000)
-      return () => clearInterval(interval)
-    }
-  }, [phase])
-
-  const prepareSubtitle = () => {
+  const prepareSubtitle = useCallback(() => {
     const subtitlesToUse = room?.subtitles?.map(sub => {
       if (!sub.editable) return sub
       if (isWatchingAllClips) {
@@ -86,30 +89,29 @@ const VideoPlayer: React.FC<{ onClipsWatched?: () => void }> = ({ onClipsWatched
       }
       return sub
     }) || []
+
     subtitlesToUse.forEach(sub => {
       setTimeout(() => setCurrentSubtitle(sub), sub.startTime)
       setTimeout(() => setCurrentSubtitle(undefined), sub.endTime)
     })
-  }
+  }, [room, isWatchingAllClips, playIndex])
 
-  const handleVideoEnd = () => {
+  const handleVideoEnd = useCallback(() => {
     if (playIndex + 1 < totalPlays) {
       setPlayIndex(playIndex + 1)
       setPhase('countdown')
     } else {
       setPhase('done')
-      if (onClipsWatched) {
-        onClipsWatched()
-      }
+      onClipsWatched?.()
     }
-  }
+  }, [playIndex, totalPlays, onClipsWatched])
 
   const handleManualPlay = () => {
     videoRef.current?.play()
     setShowPlayButton(false)
   }
 
-   const handleSkipClip = () => {
+  const handleSkipClip = () => {
     ws.send(`/app/rooms/${room.id}/status/watching-clip/change-clip`)
     setPlayIndex(0)
     setCurrentTime(3)
@@ -120,6 +122,7 @@ const VideoPlayer: React.FC<{ onClipsWatched?: () => void }> = ({ onClipsWatched
   return (
     <div className={styles.container}>
       {phase === 'fade' && <div className={`${styles.screen} ${styles['fade-in']}`} />}
+
       {phase === 'countdown' && (
         <div className={styles.screen}>
           <div className={styles['overlay-text']}>
@@ -130,6 +133,7 @@ const VideoPlayer: React.FC<{ onClipsWatched?: () => void }> = ({ onClipsWatched
           </div>
         </div>
       )}
+
       {phase === 'playing' && (
         <div className={styles.screen}>
           <video
@@ -164,16 +168,13 @@ const VideoPlayer: React.FC<{ onClipsWatched?: () => void }> = ({ onClipsWatched
             </div>
           )}
 
-        {room?.status === 'WATCHING_CLIP' && room?.players?.find(p => p.isMe && p.isLeader) && (
-          <div className={styles.skipButton}>
-            <Button
-              onClick={handleSkipClip}
-              size="small"
-            >
-              ⏭ {t('game.watching.video_player.skip')}
-            </Button>
-          </div>
-        )}
+          {room?.status === 'WATCHING_CLIP' && room?.players?.find(p => p.isMe && p.isLeader) && (
+            <div className={styles.skipButton}>
+              <Button onClick={handleSkipClip} size="small">
+                ⏭ {t('game.watching.video_player.skip')}
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </div>

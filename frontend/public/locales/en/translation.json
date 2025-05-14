@@ -59,7 +59,8 @@
             "room_info": {
                 "code": "Code",
                 "click_to_show": "Click to show",
-                "click_to_copy": "Click to copy the link"
+                "click_to_copy": "Click to copy the link",
+                "link_copied": "Invitation link copied!"
             },
             "player_list": {
                 "title": "Players",

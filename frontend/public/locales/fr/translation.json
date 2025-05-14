@@ -59,7 +59,8 @@
             "room_info": {
                 "code": "Code",
                 "click_to_show": "Clique pour afficher",
-                "click_to_copy": "Clique pour copier le lien"
+                "click_to_copy": "Clique pour copier le lien",
+                "link_copied": "Lien d'invitation copié !"
             },
             "player_list": {
                 "title": "Joueurs",

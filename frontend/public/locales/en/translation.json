@@ -1,7 +1,100 @@
 {
-    "welcome": "Welcome",
-    "language": "Language",
+    "words": {
+        "loading": "Loading",
+        "unknown": "Unknown",
+        "waiting": "Waiting",
+        "validate": "Validate"
+    },
+    "components": {
+        "character_select": {
+            "placeholder": "Enter your nickname",
+            "error": {
+                "empty_nickname": "Enter a nickname"
+            }
+        }
+    },
     "home": {
-        "select_character": "Select Character"
+        "player_setup": {
+            "select_character": "Choose your character"
+        },
+        "game_info": {
+            "title": "Your turn to play!",
+            "slider": {
+                "slide_1": {
+                    "sentence_1": "Create a game or join one.",
+                    "sentence_2": "Gather your crew and get ready to drop some gold!"
+                },
+                "slide_2": {
+                    "sentence_1": "Everyone watches the same clip at the same time 📽️",
+                    "sentence_2": "Keep your eyes wide open — it plays twice!"
+                },
+                "slide_3": {
+                    "sentence_1": "Come up with the funniest line for your clip 🎯",
+                    "sentence_2": "(You can be serious... or totally ridiculous 🤪)"
+                },
+                "slide_4": {
+                    "sentence_1": "Check out everyone's subtitles 😂",
+                    "sentence_2": "Get ready for legendary moments!"
+                },
+                "slide_5": {
+                    "sentence_1": "Vote for your favorite subtitle 🗳️",
+                    "sentence_2": "In the end: Golden Egg... and guaranteed laughs!"
+                }
+            },
+            "create_room": "Create a game",
+            "join_room": "Join friends"
+        }
+    },
+    "join": {
+        "game_info": {
+            "title": "Join friends to play!",
+            "join_room": "Join a game"
+        },
+        "player_setup": {
+            "select_character": "Choose your character"
+        }
+    },
+    "game": {
+        "common": {
+            "room_info": {
+                "code": "Code",
+                "click_to_show": "Click to show",
+                "click_to_copy": "Click to copy the link"
+            },
+            "player_list": {
+                "title": "Players",
+                "actions": {
+                    "kick": "Kick",
+                    "make_leader": "Make leader"
+                }
+            }
+        },
+        "lobby": {
+            "waiting": "Waiting for host to start...",
+            "start": "Start the game"
+        },
+        "podium": {
+            "title": "Ranking",
+            "play_again": "Play again"
+        },
+        "subtitle_phase": {
+            "remaining_time": "Time remaining",
+            "write_your_best_subtitle": "Give us your best subtitle!"
+        },
+        "vote_phase": {
+            "remaining_time": "Time remaining"
+        },
+        "vote_results": {
+            "round_results": "Round results"
+        },
+        "watching": {
+            "waiting": "Waiting for...",
+            "video_player": {
+                "unsupported": "Your browser does not support video.",
+                "skip": "Skip",
+                "start": "Start video",
+                "round": "Round"
+            }
+        }
     }
 }

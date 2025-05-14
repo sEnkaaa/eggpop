@@ -24,7 +24,7 @@ const Lobby: React.FC = () => {
                             ws.send(`/app/rooms/${room?.id}/start`)
                         }}
                     >
-                        Start
+                        {t('game.lobby.start')}
                     </Button>
                 </div>
             )}

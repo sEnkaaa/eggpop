@@ -70,7 +70,8 @@
             }
         },
         "lobby": {
-            "waiting": "En attente de l'hôte pour démarrer..."
+            "waiting": "En attente de l'hôte pour démarrer...",
+            "start": "Démarrer la partie"
         },
         "podium": {
             "title": "Classement",

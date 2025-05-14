@@ -3,6 +3,7 @@ import React from "react"
 import styles from './layout.module.scss'
 import { useNavigate } from "react-router-dom"
 import useApp from "../../utils/hooks/useApp"
+import LanguageSelector from "./components/LanguageSelector"
 
 interface Props {
   children: React.ReactNode
@@ -23,6 +24,7 @@ const AppLayout: React.FC<Props> = (props) => {
           alt="Logo"
           className={styles.logo}
         />
+        <LanguageSelector />
       </div>
       <div className={styles.main}>
         {children}

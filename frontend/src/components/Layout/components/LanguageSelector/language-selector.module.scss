@@ -1,0 +1,47 @@
+.wrapper {
+  position: relative;
+  width: max-content;
+}
+
+.selector {
+  background-color: $panel-background-color;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.flag {
+  width: 34px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #330f4e;
+  border-radius: 6px;
+  margin-top: 4px;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  cursor: pointer;
+  color: white;
+
+  &:hover {
+    background-color: #4c1c6f;
+  }
+}

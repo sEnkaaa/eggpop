@@ -1,7 +1,6 @@
-FROM nginx
+FROM nginx:stable
 
-COPY ./frontend/dist /usr/share/nginx/html
+ARG APP_ENV=production
+ENV APP_ENV=${APP_ENV}
 
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+COPY ./default.${APP_ENV}.conf /etc/nginx/conf.d/default.conf

@@ -1,0 +1,25 @@
+# Étape 1 : Build avec Gradle
+FROM gradle:8.14.0-jdk21 AS builder
+
+WORKDIR /app
+COPY . /app
+
+# Exécuter le build
+RUN gradle clean build -x test
+
+# Vérifier si le fichier JAR est bien généré
+RUN ls -l /app/build/libs/
+
+# Étape 2 : Exécution avec OpenJDK
+FROM openjdk:21
+
+WORKDIR /app
+
+# Copier le fichier JAR généré
+COPY --from=builder /app/build/libs/*.jar app.jar
+
+ENV SPRING_PROFILES_ACTIVE=prod
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "app.jar"]

@@ -17,7 +17,7 @@ class WebSocketService {
 
   private initClient() {
     this.client = new Client({
-      brokerURL: 'ws://localhost:8080/ws',
+      brokerURL: import.meta.env.VITE_BACKEND_WS,
       reconnectDelay: 5000,
       connectHeaders: {
         'X-SESSION-TOKEN': this.token || ''
@@ -52,7 +52,7 @@ class WebSocketService {
 
   private async ensureSession(): Promise<boolean> {
     try {
-      const res = await fetch('http://localhost:8080/session', {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_HTTP}/session`, {
         credentials: 'include'
       })
       let json = null

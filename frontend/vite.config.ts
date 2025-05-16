@@ -5,10 +5,14 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   publicDir: 'public',
+  base: '/',
   server: {
     open: false,
     host: '0.0.0.0',
     port: 5173,
+  },
+   build: {
+    outDir: 'dist'
   },
   resolve: {
     alias: {

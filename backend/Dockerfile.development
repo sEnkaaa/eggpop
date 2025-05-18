@@ -3,4 +3,6 @@ FROM gradle:8.14.0-jdk21
 WORKDIR /app
 COPY . /app
 
+ENV SPRING_PROFILES_ACTIVE=dev
+
 CMD ["gradle", "bootRun", "--no-daemon"]

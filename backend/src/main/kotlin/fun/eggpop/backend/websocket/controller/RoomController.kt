@@ -26,7 +26,7 @@ import mu.KotlinLogging
 private val logger = KotlinLogging.logger {}
 
 @Controller
-class RoomController(
+open class RoomController(
     private val gameService: GameService,
     private val clipRepository: ClipRepository,
     private val subtitleRepository: SubtitleRepository,
@@ -684,7 +684,7 @@ class RoomController(
         }
     }
 
-    private fun sendRoomToAllPlayers(room: Room) {
+    open fun sendRoomToAllPlayers(room: Room) {
         for (player in room.players) {
             val personalizedRoom = room.copy(
                 players = room.players.map { p ->

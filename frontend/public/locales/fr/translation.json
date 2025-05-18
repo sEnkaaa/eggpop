@@ -51,7 +51,7 @@
             "join_room": "Rejoindre une partie"
         },
         "player_setup": {
-            "select_character": "Choisis ton personnage"
+            "title": "Choisis ton personnage"
         }
     },
     "game": {
@@ -86,7 +86,7 @@
             "remaining_time": "Temps restant"
         },
         "vote_results": {
-            "round_results": "Résultats du tout"
+            "round_results": "Résultats du tour"
         },
         "watching": {
             "waiting":"En attente de...",

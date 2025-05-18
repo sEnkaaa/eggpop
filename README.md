@@ -43,6 +43,10 @@ Tout est **entièrement dockerisé**, aucun script d'installation nécessaire.
 
 1. Créez un fichier `.env` à la racine du projet (voir section suivante).
 2. Lancez les commandes suivantes :
+```bash
+docker-compose build --no-cache
+docker-compose up -d
+```
 
 ---
 

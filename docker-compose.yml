@@ -5,7 +5,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.${NODE_ENV}
-    image: node:18
     container_name: frontend
     working_dir: /app
     volumes:

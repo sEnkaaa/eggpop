@@ -22,6 +22,7 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import java.util.UUID
 import mu.KotlinLogging
+import java.time.Instant
 
 private val logger = KotlinLogging.logger {}
 
@@ -685,6 +686,7 @@ open class RoomController(
     }
 
     open fun sendRoomToAllPlayers(room: Room) {
+        room.lastActivityAt = Instant.now()
         for (player in room.players) {
             val personalizedRoom = room.copy(
                 players = room.players.map { p ->

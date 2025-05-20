@@ -1,10 +1,12 @@
 package `fun`.eggpop.backend.websocket.service
 
-import org.springframework.stereotype.Service
 import `fun`.eggpop.backend.websocket.model.Room
 import `fun`.eggpop.backend.websocket.model.Player
+import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.stereotype.Service
 import java.util.*
 import kotlin.random.Random
+import java.time.Instant
 
 @Service
 class GameService {
@@ -39,6 +41,17 @@ class GameService {
 
     fun getRoomById(roomId: String): Room? {
         return rooms.find { it.id == roomId }
+    }
+
+    @Scheduled(fixedRate = 60000)
+    fun scheduledCleanup() {
+        println("Scheduled cleanup running...")
+        cleanOldRooms()
+    }
+    
+    fun cleanOldRooms(maxAgeMinutes: Long = 120) {
+        val cutoff = Instant.now().minusSeconds(maxAgeMinutes * 60)
+        rooms.removeIf { it.lastActivityAt.isBefore(cutoff) }
     }
 
     private fun generateRoomId(): String {

@@ -29,7 +29,14 @@ const AppLayout: React.FC<Props> = (props) => {
         {children}
       </div>
       <div className={styles.footer}>
-        &copy; {new Date().getFullYear()} - EGGPOP
+        <div>
+          &copy; {new Date().getFullYear()} - EGGPOP
+        </div>
+        <div>
+          <a href="https://github.com/sEnkaaa/eggpop" target="_blank">
+            Github
+          </a>
+        </div>
       </div>
     </div>
   )

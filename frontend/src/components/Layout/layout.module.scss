@@ -31,8 +31,14 @@
     grid-area: footer;
     padding: 1rem;
     display: flex;
+    gap: 1rem;
     justify-content: center;
     align-items: center;
+  }
+
+  .footer a {
+    text-decoration: underline;
+    color: inherit;
   }
 }
 

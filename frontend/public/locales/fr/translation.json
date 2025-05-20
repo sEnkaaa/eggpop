@@ -93,7 +93,7 @@
             "video_player": {
                 "unsupported": "Votre navigateur ne prend pas en charge la vidéo.",
                 "skip": "Passer",
-                "start": "Démarrer la vidéo",
+                "play": "Démarrer la vidéo",
                 "round": "Tour"
             }
         }

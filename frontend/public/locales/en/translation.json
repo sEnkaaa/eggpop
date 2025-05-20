@@ -93,7 +93,7 @@
             "video_player": {
                 "unsupported": "Your browser does not support video.",
                 "skip": "Skip",
-                "start": "Start video",
+                "play": "Start video",
                 "round": "Round"
             }
         }
